@@ -10,7 +10,7 @@ if !exists("g:curl_headers")
     let g:curl_headers = {}
 endif
 
-function! s:curl(method, url, argments, data)
+function! curl#Curl(method, url, argments, data)
     let a:http_method = toupper(a:method)
     if index(['GET', 'DELETE', 'HEAD', 'POST', 'PUT'], a:http_method) < 0
         echoerr "No such method ".a:method
@@ -58,11 +58,11 @@ function! s:curl(method, url, argments, data)
     return join(split(a:response, "\n")[3:], "\n")
 endfunction
 
-function! CurlGet(url, argments)
-    return s:curl("GET", a:url, a:argments, {})
+function! curl#Get(url, argments)
+    return curl#Curl("GET", a:url, a:argments, {})
 endfunction
 
-function! CurlPost(url, argments, data)
-    return s:curl("POST", a:url, a:argments, a:data)
+function! curl#Post(url, argments, data)
+    return curl#Curl("POST", a:url, a:argments, a:data)
 endfunction
 

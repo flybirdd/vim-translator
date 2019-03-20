@@ -5,9 +5,9 @@ if !exists("g:yd_url")
     let g:yd_url = "http://dict.youdao.com/suggest""
 endif
 
-function! Translator()
+function! api#youdao#Translator()
     let a:queries = {"q": expand("<cword>"), "num": "1", "le": "eng", "doctype": "json"}
-    let a:result = JSON#parse(CurlGet(g:yd_url, a:queries))
+    let a:result = json#Parse(curl#Get(g:yd_url, a:queries))
 
     if a:result["result"]["code"] == 200
         let a:entries = a:result["data"]["entries"]

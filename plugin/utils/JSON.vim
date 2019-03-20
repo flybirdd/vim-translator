@@ -4,7 +4,7 @@
 "
 " Copyright (c) Tim Pope. Distributed under the same terms as Vim itself. See :help license.
 
-function JSON#parse(string)
+function json#Parse(string)
   let [null, false, true] = ['', 0, 1]
   let stripped = substitute(a:string,'\C"\(\\.\|[^"\\]\)*"','','g')
   if stripped !~# "[^,:{}\\[\\]0-9.\\-+Eaeflnr-u \n\r\t]"
@@ -16,7 +16,7 @@ function JSON#parse(string)
   call s:throw("invalid JSON: ".stripped)
 endfunction
 
-function! JSON#stringify(object)
+function! json#Stringify(object)
   if type(a:object) == type('')
     return '"' . substitute(a:object, "[\001-\031\"\\\\]", '\=printf("\\u%04x", char2nr(submatch(0)))', 'g') . '"'
   elseif type(a:object) == type([])
