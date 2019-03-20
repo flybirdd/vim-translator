@@ -1,14 +1,10 @@
 " Maintainer: Rui Xiang
 " Version: 1.0.0
 
-if exists('g:loaded_curl')
-    finish
-endif
-let g:loaded_curl = 1
-
-if !exists("g:curl_headers")
-    let g:curl_headers = {}
-endif
+"if exists('g:loaded_curl')
+"    finish
+"endif
+"let g:loaded_curl = 1
 
 function! curl#Curl(method, url, argments, data)
     let a:http_method = toupper(a:method)
@@ -16,13 +12,9 @@ function! curl#Curl(method, url, argments, data)
         echoerr "No such method ".a:method
         return -1
     endif
-
+ 
     let a:command = ""
     
-    for header_key in keys(g:curl_headers)
-        let a:command += "-H " . header_key . " " . g:curl_headers[header_key] . " "
-    endfor
-
     let a:command = a:command . a:url
 
     let a:queries=""
@@ -53,9 +45,27 @@ function! curl#Curl(method, url, argments, data)
         let a:command = a:command . "--data " . a:body
     endif
 
-    let a:response = system("curl " . shellescape(a:command))
+    let a:message = system("curl -sSi " . shellescape(a:command))
 
-    return join(split(a:response, "\n")[3:], "\n")
+    if v:shell_error
+        throw a:message
+    endif
+
+    let a:response = split(a:message, '\r\n')
+
+    let a:http_code = a:response[0]
+    if matchstr(a:http_code, "20") != 20
+        throw a:http_code
+    endif
+
+    let a:body = ""
+    for line_num in range(1, len(a:response) - 1) 
+        if a:response[line_num] == ""
+            let a:body = join(a:response[line_num + 1:], '\n')
+        endif
+    endfor
+    
+    return a:body
 endfunction
 
 function! curl#Get(url, argments)
@@ -66,3 +76,10 @@ function! curl#Post(url, argments, data)
     return curl#Curl("POST", a:url, a:argments, a:data)
 endfunction
 
+function! curl#Put(url, argments, data)
+    return curl#Curl("PUT", a:url, a:argments, a:data)
+endfunction
+
+function! curl#Delete(url, argments)
+    return curl#Curl("DELETE", a:url, a:argments, {})
+endfunction
