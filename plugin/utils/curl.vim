@@ -32,10 +32,10 @@ function! curl#Curl(method, url, argments, data)
     if http_method == "POST" || http_method == "PUT"
         for data_key in keys(a:data)
             if strlen(req_body) == 0
-                let req_body = data_key . "=" . data[data_key]
+                let req_body = data_key . "=" . a:data[data_key]
                 continue
             endif
-            let req_body = req_body . "&" . data_key . "=" . data[data_key]
+            let req_body = req_body . "&" . data_key . "=" . a:data[data_key]
         endfor
     endif
 
