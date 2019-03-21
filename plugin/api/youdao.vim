@@ -7,7 +7,8 @@ endif
 
 function! api#youdao#Translator()
     let queries = {"q": expand("<cword>"), "num": "1", "le": "eng", "doctype": "json"}
-    let result = json#Parse(curl#Get(g:yd_url, queries))
+
+    let result = json_decode(curl#Get(g:yd_url, queries))
 
     if result["result"]["code"] == 200
         let entries = result["data"]["entries"]
