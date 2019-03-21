@@ -1,10 +1,10 @@
 " Maintainer: Rui Xiang
 " Version: 1.0.0
 
-"if exists('g:loaded_curl')
-"    finish
-"endif
-"let g:loaded_curl = 1
+if exists('g:loaded_curl')
+    finish
+endif
+let g:loaded_curl = 1
 
 function! curl#Curl(method, url, argments, data)
     let a:http_method = toupper(a:method)
@@ -13,9 +13,9 @@ function! curl#Curl(method, url, argments, data)
         return -1
     endif
  
-    let a:command = ""
+    let a:full_url = ""
     
-    let a:command = a:command . a:url
+    let a:full_url= a:full_url . a:url
 
     let a:queries=""
     for arg_key in keys(a:argments)
@@ -27,25 +27,27 @@ function! curl#Curl(method, url, argments, data)
     endfor
 
     if strlen(a:queries) > 0
-        let a:command = a:command . "?" . a:queries . " "
+        let a:full_url = a:full_url . "?" . a:queries . " "
     endif
 
-    let a:body=""
+    let a:req_body=""
     if a:http_method == "POST" || a:http_method == "PUT"
         for data_key in keys(a:data)
-            if strlen(a:body) == 0
-                let a:body = data_key . "=" . a:data[data_key]
+            if strlen(a:req_body) == 0
+                let a:req_body = data_key . "=" . a:data[data_key]
                 continue
             endif
-            let a:body = a:body . "&" . data_key . "=" . a:data[data_key]
+            let a:req_body = a:req_body . "&" . data_key . "=" . a:data[data_key]
         endfor
     endif
 
-    if strlen(a:body) > 0
-        let a:command = a:command . "--data " . a:body
+    let a:command = a:full_url
+
+    if strlen(a:req_body) > 0
+        let a:command = a:command . " --data " . shellescape(a:req_body)
     endif
 
-    let a:message = system("curl -sSi " . shellescape(a:command))
+    let a:message = system("curl -sSi " . a:command)
 
     if v:shell_error
         throw a:message
