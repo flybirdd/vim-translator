@@ -1,6 +1,6 @@
 # Vim Translator
 
-Vim Translator 是vim上的翻译插件，可以normal模式下获取光标下的英文单词，并将其翻译成中文。
+Vim Translator 是vim上的翻译插件，normal模式下获取光标下的英文单词，并将其翻译成中文。
 
 # 依赖
 
@@ -26,5 +26,5 @@ curl - vim-translator 通过curl调用远程 API
 
 # 用法
 
-在normal下将光标移动到英文单词，然后按`d`键
+在normal下将光标移动到英文单词，然后按`t`键
 
