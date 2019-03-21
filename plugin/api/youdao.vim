@@ -6,12 +6,12 @@ if !exists("g:yd_url")
 endif
 
 function! api#youdao#Translator()
-    let a:queries = {"q": expand("<cword>"), "num": "1", "le": "eng", "doctype": "json"}
-    let a:result = json#Parse(curl#Get(g:yd_url, a:queries))
+    let queries = {"q": expand("<cword>"), "num": "1", "le": "eng", "doctype": "json"}
+    let result = json#Parse(curl#Get(g:yd_url, queries))
 
-    if a:result["result"]["code"] == 200
-        let a:entries = a:result["data"]["entries"]
-        echo a:entries[0]['explain']
+    if result["result"]["code"] == 200
+        let entries = result["data"]["entries"]
+        echo entries[0]['explain']
     else
         echo "Translatored failed."
     endif
