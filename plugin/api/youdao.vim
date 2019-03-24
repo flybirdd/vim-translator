@@ -7,7 +7,7 @@ endif
 
 function! api#youdao#Translator()
 
-    let word = expand("<cword>")
+    let word = word#UnderCursor()
 
     let queries = {"q": word, "num": "1", "le": "eng", "doctype": "json"}
 
